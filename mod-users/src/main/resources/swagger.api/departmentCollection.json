@@ -1,0 +1,25 @@
+{
+  "departmentCollection": {
+    "title": "Department Collection",
+    "description": "Department collection object schema",
+    "type": "object",
+    "properties": {
+      "departments": {
+        "type": "array",
+        "description": "List of departments",
+        "items": {
+          "type": "object",
+          "$ref": "department.json#/department"
+        }
+      },
+      "totalRecords": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "departments",
+      "totalRecords"
+    ]
+  }
+}

@@ -1,0 +1,179 @@
+swagger: '2.0' #version of Swagger
+info: # High Level information of API
+  description: BlUsers Swagger API #Give the description of API
+  version: 1.0.0 #API version
+  title: Swagger Users # API title
+  license: #Swagger license info
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: localhost # Host Name
+basePath: / #Basepath when there are multiple versions of API running
+tags: # Tag information for each API operation. Multiple tags for multiple API operation
+  - name: departments #Tag name
+    description: Everything about your BlUsers #Tag description of API operation
+schemes:
+  - http
+definitions:
+  department:
+    "$ref": "department.json#/department"
+  departmentCollection:
+    "$ref": "departmentCollection.json#/departmentCollection"
+  errors:
+    "$ref": "errors.json#/errors"
+parameters:
+  trait:pageable:offset:
+    default: 0
+    minimum: 0
+    maximum: 2147483647
+    description: Skip over a number of elements by specifying an offset value for
+      the query
+    type: integer
+    in: query
+    name: offset
+  trait:pageable:limit:
+    default: 10
+    minimum: 0
+    maximum: 2147483647
+    description: Limit the number of elements returned in the response
+    type: integer
+    in: query
+    name: limit
+  trait:language:lang:
+    default: en
+    pattern: "[a-zA-Z]{2}"
+    description: 'Requested language. Optional. [lang=en]'
+    type: string
+    in: query
+    name: lang
+responses:
+  trait:validate:422:
+    description: Validation errors
+    examples:
+      application/json: Can not resolve ../examples/errors.sample
+    schema:
+      $ref: "#/definitions/errors"
+paths:
+  /departments:
+    get:
+      description: Return a list of departmants
+      operationId: getDepartments
+      produces:
+        - application/json
+      parameters:
+        - description: A query expressed as a CQL string
+          type: string
+          in: query
+          name: query
+        - "$ref": "#/parameters/trait:pageable:offset"
+        - "$ref": "#/parameters/trait:pageable:limit"
+      responses:
+        '200': #Successful status code
+          description: successful operation #Successful status description
+          schema:
+            $ref: "#/definitions/departmentCollection"
+        '400':
+          description: Bad request
+          schema:
+            type: string
+            example: "Bad request"
+        '403':
+          description: Access denied
+          schema:
+            type: string
+            example: "Access denied"
+        '404':
+          description: not found
+          schema:
+            type: string
+            example: "not found"
+        '422':
+          $ref: "#/responses/trait:validate:422"
+        '500':
+          description: Internal server error
+          schema:
+            type: string
+            example: "Internal server error"
+    post:
+      description: Create a departmant
+      operationId: createDepartment
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: department
+          schema:
+            $ref: "#/definitions/department"
+      responses:
+        '200': #Successful status code
+          description: successful operation #Successful status description
+          schema:
+            $ref: "#/definitions/department"
+        '400':
+          description: Bad request
+          schema:
+            type: string
+            example: "Bad request"
+        '403':
+          description: Access denied
+          schema:
+            type: string
+            example: "Access denied"
+        '404':
+          description: not found
+          schema:
+            type: string
+            example: "not found"
+        '422':
+          $ref: "#/responses/trait:validate:422"
+        '500':
+          description: Internal server error
+          schema:
+            type: string
+            example: "Internal server error"
+  "/departments/{departmentId}":
+    put:
+      operationId: updateDepartment
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+          type: string
+          in: path
+          name: departmentId
+          required: true
+        - in: body
+          name: department
+          schema:
+            $ref: "#/definitions/department"
+          required: true
+      responses:
+        '200': #Successful status code
+          description: successful operation #Successful status description
+          schema:
+            $ref: "#/definitions/department"
+        '400':
+          description: Bad request
+          schema:
+            type: string
+            example: "Bad request"
+        '403':
+          description: Access denied
+          schema:
+            type: string
+            example: "Access denied"
+        '404':
+          description: not found
+          schema:
+            type: string
+            example: "not found"
+        '422':
+          $ref: "#/responses/trait:validate:422"
+        '500':
+          description: Internal server error
+          schema:
+            type: string
+            example: "Internal server error"
